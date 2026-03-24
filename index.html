@@ -3,132 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vextum Granular Payout Engine</title>
+    <title>Vextum Full-Phase Granular Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type=range]::-webkit-slider-runnable-track { background: #e2e8f0; height: 8px; border-radius: 4px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; background: #4f46e5; margin-top: -6px; border-radius: 50%; cursor: pointer; }
+    </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900">
 
     <div class="max-w-7xl mx-auto py-12 px-4">
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b pb-6 gap-4">
-            <div>
-                <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">Vextum Payout Engine</h1>
-                <p class="text-slate-500 mt-1 uppercase text-xs font-bold tracking-widest">Stakeholder Granularity v3.0</p>
-            </div>
-            <button onclick="addLineItem()" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">+ Add Talent Line</button>
+        <header class="mb-10 border-b pb-6">
+            <h1 class="text-4xl font-black text-indigo-700 tracking-tight">Vextum Granular Engine</h1>
+            <p class="text-slate-500 mt-1 font-bold text-xs uppercase tracking-widest">Full Phase & Stakeholder Transparency</p>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <div class="lg:col-span-6 space-y-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Contract Basics</h2>
-                    <div class="grid grid-cols-2 gap-4">
+            <div class="lg:col-span-5 space-y-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <h2 class="text-xs font-black uppercase text-slate-400 mb-4 tracking-tighter">Contract Parameters</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Client Budget ($)</label>
-                            <input type="number" id="clientBudget" value="5000" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500" oninput="calculate()">
+                            <input type="number" id="clientBudget" value="5000" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 font-bold" oninput="calculate()">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Setup Fee ($)</label>
-                            <input type="number" id="setupInput" value="1500" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500" oninput="calculate()">
+                            <input type="number" id="setupInput" value="1500" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 font-bold" oninput="calculate()">
                         </div>
                     </div>
+
+                    <div id="lineItemsContainer" class="space-y-3 mb-6"></div>
+                    <button onclick="addLineItem()" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-bold hover:bg-slate-50 transition">+ Add Talent Niche</button>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Proposed Team</h2>
-                    <div id="lineItemsContainer" class="space-y-3"></div>
-                </div>
-
-                <div class="bg-slate-900 p-6 rounded-2xl shadow-lg text-white">
+                <div class="bg-slate-900 p-6 rounded-3xl shadow-xl text-white">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Leadership Count</h2>
-                        <span id="csuiteDisplay" class="text-2xl font-black text-indigo-400">4</span>
+                        <h2 class="text-xs font-bold uppercase text-slate-400">Leadership Count</h2>
+                        <span id="csuiteDisplay" class="text-3xl font-black text-indigo-400">4</span>
                     </div>
-                    <input type="range" id="csuiteCount" min="1" max="10" value="4" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
-                    <p class="text-[10px] text-slate-500 mt-2 uppercase">Adjusting this splits the 15% (Monthly) and 35% (Setup) pools.</p>
+                    <input type="range" id="csuiteCount" min="1" max="10" value="4" class="w-full appearance-none bg-transparent" oninput="calculate()">
+                    <p class="text-[10px] text-slate-500 mt-4 leading-relaxed italic">
+                        *C-Suite Pool (15% Monthly / 35% Setup) is split equally among these members.
+                    </p>
                 </div>
             </div>
 
-            <div class="lg:col-span-6 space-y-6">
-                
-                <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden sticky top-6">
-                    <div class="bg-indigo-700 p-6 text-white">
-                        <div class="flex justify-between items-center">
-                            <h2 class="text-xl font-bold">Individual Payout Breakdown</h2>
-                            <div class="text-right">
-                                <p class="text-[10px] uppercase font-bold text-indigo-300">Total Model Price</p>
-                                <p class="text-2xl font-black" id="totalRetainer">$0.00</p>
-                            </div>
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden">
+                    
+                    <div class="bg-indigo-700 p-6 text-white flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase text-indigo-300">Total Modeled Price</p>
+                            <h2 class="text-3xl font-black" id="totalRetainer">$0.00</h2>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-bold uppercase text-indigo-300">Variance vs Budget</p>
+                            <h2 class="text-xl font-bold" id="varianceDisplay">$0.00</h2>
                         </div>
                     </div>
 
-                    <div class="p-6 space-y-8">
-                        
-                        <div>
-                            <div class="flex justify-between items-end border-b pb-2 mb-4">
-                                <h3 class="font-black text-slate-800 uppercase text-sm tracking-tighter text-indigo-600">Monthly Steady-State (Phase 2)</h3>
-                                <span class="text-[10px] font-bold text-slate-400">20% OVERHEAD MODEL</span>
-                            </div>
-                            
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                                    <span class="text-sm font-medium">VA Talent Fund (60%)</span>
-                                    <span class="font-bold text-slate-900" id="m_talent_fund">$0.00</span>
-                                </div>
-
-                                <div class="px-3 space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-slate-500">BD / Sales Lead (0%*)</span>
-                                        <span class="font-bold text-slate-400">$0.00</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-slate-500">Account Manager (5%)</span>
-                                        <span class="font-bold text-slate-900" id="m_am_each">$0.00</span>
-                                    </div>
-                                    <div class="flex justify-between items-center pt-2 border-t border-slate-100">
-                                        <span class="text-sm font-bold text-indigo-700">Per C-Suite Member (Share of 15%)</span>
-                                        <span class="text-lg font-black text-indigo-700" id="m_csuite_each">$0.00</span>
-                                    </div>
-                                    <p class="text-[10px] text-right text-slate-400 italic">Pool Total: <span id="m_csuite_total"></span></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between items-end border-b pb-2 mb-4">
-                                <h3 class="font-black text-emerald-600 uppercase text-sm tracking-tighter">Setup Fee Distribution</h3>
-                                <span class="text-[10px] font-bold text-slate-400" id="displaySetupHeader">$0.00 TOTAL</span>
-                            </div>
-                            
-                            <div class="space-y-3">
-                                <div class="grid grid-cols-2 gap-3 px-3">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-slate-500">BD Lead (35%)</span>
-                                        <span class="font-bold text-slate-900" id="s_bd">$0.00</span>
-                                    </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-slate-500">Profit (15%)</span>
-                                        <span class="font-bold text-slate-900" id="s_profit">$0.00</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex justify-between items-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                                    <div>
-                                        <p class="text-[10px] font-black text-emerald-600 uppercase">Per C-Suite Individual</p>
-                                        <p class="text-sm text-emerald-800">Share of 35% Pool</p>
-                                    </div>
-                                    <span class="text-2xl font-black text-emerald-700" id="s_csuite_each">$0.00</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="varianceBox" class="p-4 rounded-2xl flex justify-between items-center border-2">
-                            <div class="text-left">
-                                <p class="text-[10px] font-black uppercase opacity-60">Budget Variance</p>
-                                <p id="varianceStatus" class="text-xs font-bold"></p>
-                            </div>
-                            <p id="varianceAmount" class="text-xl font-black"></p>
-                        </div>
+                    <div class="p-0 overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase">
+                                    <th class="p-4">Stakeholder / Component</th>
+                                    <th class="p-4 bg-amber-50 text-amber-700">Phase 1 (M1-3)</th>
+                                    <th class="p-4 bg-indigo-50 text-indigo-700">Phase 2 (M4+)</th>
+                                    <th class="p-4 bg-emerald-50 text-emerald-700">Setup Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-xs font-bold">
+                                <tr class="border-b border-slate-50">
+                                    <td class="p-4 font-normal text-slate-500">Talent Fund (VA)</td>
+                                    <td class="p-4 text-amber-600" id="p1_va">50%</td>
+                                    <td class="p-4 text-indigo-600" id="p2_va">60%</td>
+                                    <td class="p-4 text-slate-300">—</td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="p-4 font-normal text-slate-500">BD / Sales Lead</td>
+                                    <td class="p-4" id="p1_bd">$0.00 (10%)</td>
+                                    <td class="p-4 text-slate-300">$0.00 (0%)</td>
+                                    <td class="p-4 text-emerald-600" id="s_bd">$0.00 (35%)</td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="p-4 font-normal text-slate-500">Account Manager</td>
+                                    <td class="p-4" id="p1_am">$0.00 (5%)</td>
+                                    <td class="p-4" id="p2_am">$0.00 (5%)</td>
+                                    <td class="p-4 text-slate-300">—</td>
+                                </tr>
+                                <tr class="border-b border-slate-100 bg-slate-50">
+                                    <td class="p-4 text-indigo-800">C-Suite (Each Individual)</td>
+                                    <td class="p-4 text-indigo-800" id="p1_c_each">$0.00</td>
+                                    <td class="p-4 text-indigo-800" id="p2_c_each">$0.00</td>
+                                    <td class="p-4 text-emerald-800 font-black" id="s_c_each">$0.00</td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="p-4 font-normal text-slate-500">Agency Profit</td>
+                                    <td class="p-4" id="p1_profit">10%</td>
+                                    <td class="p-4" id="p2_profit">10%</td>
+                                    <td class="p-4" id="s_profit">15%</td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="p-4 font-normal text-slate-500">Tools & Tech</td>
+                                    <td class="p-4" id="p1_tech">10%</td>
+                                    <td class="p-4" id="p2_tech">10%</td>
+                                    <td class="p-4" id="s_tech">10%</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -167,21 +151,17 @@
         function renderItems() {
             const container = document.getElementById('lineItemsContainer');
             container.innerHTML = items.map(item => `
-                <div class="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <div class="flex-grow">
-                        <select onchange="updateItem(${item.id}, 'niche', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm font-bold">
-                            ${Object.keys(pricingData).map(k => `<option value="${k}" ${item.niche === k ? 'selected' : ''}>${pricingData[k].name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="w-full md:w-28">
-                        <select onchange="updateItem(${item.id}, 'level', this.value)" class="w-full p-2 bg-white border rounded-lg text-xs">
-                            <option value="low" ${item.level === 'low' ? 'selected' : ''}>Low</option>
-                            <option value="mid" ${item.level === 'mid' ? 'selected' : ''}>Mid</option>
-                            <option value="high" ${item.level === 'high' ? 'selected' : ''}>High</option>
-                        </select>
-                    </div>
-                    <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-14 p-2 bg-white border rounded-lg text-sm text-center font-bold">
-                    <button onclick="removeLineItem(${item.id})" class="text-slate-300 hover:text-red-500 px-2">&times;</button>
+                <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <select onchange="updateItem(${item.id}, 'niche', this.value)" class="flex-grow p-2 bg-white border rounded-lg text-[11px] font-bold">
+                        ${Object.keys(pricingData).map(k => `<option value="${k}" ${item.niche === k ? 'selected' : ''}>${pricingData[k].name}</option>`).join('')}
+                    </select>
+                    <select onchange="updateItem(${item.id}, 'level', this.value)" class="p-2 bg-white border rounded-lg text-[11px]">
+                        <option value="low" ${item.level === 'low' ? 'selected' : ''}>Low</option>
+                        <option value="mid" ${item.level === 'mid' ? 'selected' : ''}>Mid</option>
+                        <option value="high" ${item.level === 'high' ? 'selected' : ''}>High</option>
+                    </select>
+                    <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-12 p-2 bg-white border rounded-lg text-[11px] text-center font-bold">
+                    <button onclick="removeLineItem(${item.id})" class="text-slate-300 hover:text-red-500 px-1">&times;</button>
                 </div>
             `).join('');
             calculate();
@@ -193,39 +173,32 @@
 
             const clientBudget = parseFloat(document.getElementById('clientBudget').value) || 0;
             const setup = parseFloat(document.getElementById('setupInput').value) || 0;
-            const csuiteCount = parseInt(document.getElementById('csuiteCount').value) || 1;
+            const cCount = parseInt(document.getElementById('csuiteCount').value) || 1;
             
-            document.getElementById('csuiteDisplay').innerText = csuiteCount;
+            document.getElementById('csuiteDisplay').innerText = cCount;
             document.getElementById('totalRetainer').innerText = format(modelTotal);
-            document.getElementById('displaySetupHeader').innerText = format(setup) + " TOTAL";
+            document.getElementById('varianceDisplay').innerText = format(clientBudget - modelTotal);
 
-            // Monthly Payouts (Phase 2 Steady State)
-            const mCsuitePool = modelTotal * 0.15;
-            document.getElementById('m_talent_fund').innerText = format(modelTotal * 0.60);
-            document.getElementById('m_am_each').innerText = format(modelTotal * 0.05);
-            document.getElementById('m_csuite_total').innerText = format(mCsuitePool);
-            document.getElementById('m_csuite_each').innerText = format(mCsuitePool / csuiteCount);
+            // Phase 1 (M1-3)
+            document.getElementById('p1_va').innerText = format(modelTotal * 0.50);
+            document.getElementById('p1_bd').innerText = format(modelTotal * 0.10);
+            document.getElementById('p1_am').innerText = format(modelTotal * 0.05);
+            document.getElementById('p1_c_each').innerText = format((modelTotal * 0.15) / cCount);
+            document.getElementById('p1_profit').innerText = format(modelTotal * 0.10);
+            document.getElementById('p1_tech').innerText = format(modelTotal * 0.10);
 
-            // Setup Payouts
-            const sCsuitePool = setup * 0.35;
+            // Phase 2 (M4+)
+            document.getElementById('p2_va').innerText = format(modelTotal * 0.60);
+            document.getElementById('p2_am').innerText = format(modelTotal * 0.05);
+            document.getElementById('p2_c_each').innerText = format((modelTotal * 0.15) / cCount);
+            document.getElementById('p2_profit').innerText = format(modelTotal * 0.10);
+            document.getElementById('p2_tech').innerText = format(modelTotal * 0.10);
+
+            // Setup
             document.getElementById('s_bd').innerText = format(setup * 0.35);
             document.getElementById('s_profit').innerText = format(setup * 0.15);
-            document.getElementById('s_csuite_each').innerText = format(sCsuitePool / csuiteCount);
-
-            // Variance
-            const variance = clientBudget - modelTotal;
-            const varBox = document.getElementById('varianceBox');
-            const varAmt = document.getElementById('varianceAmount');
-            const varStat = document.getElementById('varianceStatus');
-
-            varAmt.innerText = format(Math.abs(variance));
-            if (variance >= 0) {
-                varBox.className = "p-4 rounded-2xl flex justify-between items-center border-2 border-emerald-500 bg-emerald-50 text-emerald-700";
-                varStat.innerText = "Under Budget";
-            } else {
-                varBox.className = "p-4 rounded-2xl flex justify-between items-center border-2 border-rose-500 bg-rose-50 text-rose-700";
-                varStat.innerText = "Over Budget";
-            }
+            document.getElementById('s_tech').innerText = format(setup * 0.10);
+            document.getElementById('s_c_each').innerText = format((setup * 0.35) / cCount);
         }
 
         function format(num) {
