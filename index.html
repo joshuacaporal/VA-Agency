@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency Sales Calculator v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-900">
+
+    <div class="max-w-5xl mx-auto py-12 px-4">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Sales & Leadership Calculator</h1>
+            <p class="text-slate-500 mt-2 text-lg">Dynamic distribution for Talent, Leadership, and Profit.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Financial Inputs</h2>
+                    
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Monthly Client Budget ($)</label>
+                        <input type="number" id="budget" value="3000" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" oninput="calculate()">
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">One-Time Setup Fee ($)</label>
+                        <input type="number" id="setupInput" value="1000" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" oninput="calculate()">
+                    </div>
+                </div>
+
+                <div class="bg-indigo-900 p-6 rounded-2xl shadow-lg text-white">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-300 mb-4">Leadership Structure</h2>
+                    <label class="block text-sm font-semibold mb-2">Number of C-Suite Members</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="range" id="csuiteCount" min="1" max="10" value="2" class="flex-grow h-2 bg-indigo-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
+                        <span id="csuiteDisplay" class="text-2xl font-bold w-8 text-center">2</span>
+                    </div>
+                    <p class="text-xs text-indigo-300 mt-3 italic">*Salaries (8%) and Setup (35%) will be split equally among this count.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span>
+                    Monthly Retainer
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                        <span class="text-slate-600 font-medium">Talent Fund (60%)</span>
+                        <span class="text-lg font-bold text-slate-900" id="vaSalary">$0.00</span>
+                    </div>
+                    
+                    <div class="p-3 border border-slate-100 rounded-lg space-y-3">
+                        <div class="flex justify-between text-indigo-600 font-bold mb-1">
+                            <span>Overhead (20%)</span>
+                            <span id="overhead">$0.00</span>
+                        </div>
+                        <div class="pl-4 space-y-2 text-sm text-slate-500 border-l-2 border-slate-100">
+                            <div class="flex justify-between"><span>BD / Sales Lead (5%)</span> <span id="salBD" class="font-semibold">$0.00</span></div>
+                            <div class="flex justify-between">
+                                <span>C-Suite Total (8%)</span> 
+                                <span id="salCSuiteTotal" class="font-semibold text-slate-700">$0.00</span>
+                            </div>
+                            <div class="flex justify-between pl-4 text-xs italic">
+                                <span>Per C-Suite Member</span> 
+                                <span id="salCSuiteEach">$0.00</span>
+                            </div>
+                            <div class="flex justify-between"><span>Account Manager (1%)</span> <span id="salAM" class="font-semibold">$0.00</span></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3">
+                        <span class="text-slate-600">Agency Profit (10%)</span>
+                        <span class="font-bold text-slate-900" id="profit">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3">
+                        <span class="text-slate-600">Tools & Tech (10%)</span>
+                        <span class="font-bold text-slate-900" id="tools">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center">
+                    <span class="w-2 h-6 bg-emerald-500 rounded-full mr-3"></span>
+                    Setup Fee
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-3">
+                        <span class="text-slate-600">BD / Sales Lead (35%)</span>
+                        <span class="font-bold text-slate-900" id="setupBD">$0.00</span>
+                    </div>
+
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100 space-y-2">
+                        <div class="flex justify-between text-emerald-700 font-bold">
+                            <span>C-Suite Pool (35%)</span>
+                            <span id="setupCSuiteTotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-emerald-600 font-medium italic">
+                            <span>Per Member Share</span>
+                            <span id="setupCSuiteEach">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3">
+                        <span class="text-slate-600">Agency Profit (15%)</span>
+                        <span class="font-bold text-slate-900" id="setupProfit">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3">
+                        <span class="text-slate-600">Tools & Tech (10%)</span>
+                        <span class="font-bold text-slate-900" id="setupTools">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const budget = parseFloat(document.getElementById('budget').value) || 0;
+            const setup = parseFloat(document.getElementById('setupInput').value) || 0;
+            const csuiteCount = parseInt(document.getElementById('csuiteCount').value) || 1;
+            
+            document.getElementById('csuiteDisplay').innerText = csuiteCount;
+
+            // --- Monthly Retainer Breakdown ---
+            const va = budget * 0.60;
+            const overheadTotal = budget * 0.20;
+            const profit = budget * 0.10;
+            const tools = budget * 0.10;
+
+            document.getElementById('vaSalary').innerText = format(va);
+            document.getElementById('overhead').innerText = format(overheadTotal);
+            document.getElementById('profit').innerText = format(profit);
+            document.getElementById('tools').innerText = format(tools);
+
+            // Monthly Leadership Breakdown
+            const salBD = budget * 0.05;
+            const salCSuiteTotal = budget * 0.08;
+            const salAM = budget * 0.01;
+
+            document.getElementById('salBD').innerText = format(salBD);
+            document.getElementById('salCSuiteTotal').innerText = format(salCSuiteTotal);
+            document.getElementById('salCSuiteEach').innerText = format(salCSuiteTotal / csuiteCount);
+            document.getElementById('salAM').innerText = format(salAM);
+
+            // --- Setup Fee Breakdown ---
+            const setupBD = setup * 0.35;
+            const setupCSuiteTotal = setup * 0.35;
+            const setupProfit = setup * 0.15;
+            const setupTools = setup * 0.10;
+
+            document.getElementById('setupBD').innerText = format(setupBD);
+            document.getElementById('setupCSuiteTotal').innerText = format(setupCSuiteTotal);
+            document.getElementById('setupCSuiteEach').innerText = format(setupCSuiteTotal / csuiteCount);
+            document.getElementById('setupProfit').innerText = format(setupProfit);
+            document.getElementById('setupTools').innerText = format(setupTools);
+        }
+
+        function format(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+        }
+
+        // Run on load
+        calculate();
+    </script>
+</body>
+</html>
