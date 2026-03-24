@@ -3,104 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vextum Sales Engine | Leadership Breakdown</title>
+    <title>Vextum Granular Payout Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900">
 
     <div class="max-w-7xl mx-auto py-12 px-4">
-        <header class="flex justify-between items-end mb-10 border-b pb-6">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b pb-6 gap-4">
             <div>
-                <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">Vextum Sales Engine</h1>
-                <p class="text-slate-500 mt-1">Individual Leadership Payout Analysis</p>
+                <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">Vextum Payout Engine</h1>
+                <p class="text-slate-500 mt-1 uppercase text-xs font-bold tracking-widest">Stakeholder Granularity v3.0</p>
             </div>
-            <div class="text-right">
-                <button onclick="addLineItem()" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">+ Add Talent Line</button>
-            </div>
+            <button onclick="addLineItem()" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">+ Add Talent Line</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <div class="lg:col-span-7 space-y-6">
-                <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-amber-700 mb-4">Client Parameters</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="lg:col-span-6 space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Contract Basics</h2>
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold text-amber-900 mb-1">Client Monthly Budget ($)</label>
-                            <input type="number" id="clientBudget" value="5000" class="w-full p-3 bg-white border border-amber-300 rounded-xl outline-none" oninput="calculate()">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Client Budget ($)</label>
+                            <input type="number" id="clientBudget" value="5000" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500" oninput="calculate()">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-amber-900 mb-1">Proposed Setup Fee ($)</label>
-                            <input type="number" id="setupInput" value="1500" class="w-full p-3 bg-white border border-amber-300 rounded-xl outline-none" oninput="calculate()">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Setup Fee ($)</label>
+                            <input type="number" id="setupInput" value="1500" class="w-full p-3 bg-slate-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500" oninput="calculate()">
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Hiring Model</h2>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Proposed Team</h2>
                     <div id="lineItemsContainer" class="space-y-3"></div>
                 </div>
 
                 <div class="bg-slate-900 p-6 rounded-2xl shadow-lg text-white">
-                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Leadership Pool Size</h2>
-                    <div class="flex items-center space-x-6">
-                        <div class="flex-grow">
-                            <label class="block text-xs font-semibold mb-2 text-slate-400">Total C-Suite Members splitting the 15% Salary / 35% Setup</label>
-                            <input type="range" id="csuiteCount" min="1" max="10" value="4" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
-                        </div>
-                        <span id="csuiteDisplay" class="text-3xl font-black text-indigo-400 w-12 text-center">4</span>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Leadership Count</h2>
+                        <span id="csuiteDisplay" class="text-2xl font-black text-indigo-400">4</span>
                     </div>
+                    <input type="range" id="csuiteCount" min="1" max="10" value="4" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
+                    <p class="text-[10px] text-slate-500 mt-2 uppercase">Adjusting this splits the 15% (Monthly) and 35% (Setup) pools.</p>
                 </div>
             </div>
 
-            <div class="lg:col-span-5 space-y-6">
-                <div class="bg-white p-8 rounded-3xl border-2 border-slate-900 shadow-2xl sticky top-6">
-                    <h2 class="text-xl font-bold mb-6 text-slate-800 border-b pb-4">C-Suite Payout Analysis</h2>
-                    
-                    <div class="mb-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs font-bold uppercase text-slate-400">Monthly Leadership Share (15%)</span>
-                            <span class="bg-indigo-100 text-indigo-700 text-[10px] px-2 py-1 rounded font-bold" id="csuiteHeadcountLabel">4 MEMBERS</span>
+            <div class="lg:col-span-6 space-y-6">
+                
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden sticky top-6">
+                    <div class="bg-indigo-700 p-6 text-white">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold">Individual Payout Breakdown</h2>
+                            <div class="text-right">
+                                <p class="text-[10px] uppercase font-bold text-indigo-300">Total Model Price</p>
+                                <p class="text-2xl font-black" id="totalRetainer">$0.00</p>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="p-6 space-y-8">
                         
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase">Total Pool</p>
-                                <p class="text-xl font-bold text-slate-900" id="m_csuite_total">$0.00</p>
+                        <div>
+                            <div class="flex justify-between items-end border-b pb-2 mb-4">
+                                <h3 class="font-black text-slate-800 uppercase text-sm tracking-tighter text-indigo-600">Monthly Steady-State (Phase 2)</h3>
+                                <span class="text-[10px] font-bold text-slate-400">20% OVERHEAD MODEL</span>
                             </div>
-                            <div class="p-4 bg-indigo-600 rounded-2xl shadow-md text-white">
-                                <p class="text-[10px] font-black text-indigo-200 uppercase">Per Member</p>
-                                <p class="text-xl font-bold" id="m_csuite_each">$0.00</p>
+                            
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+                                    <span class="text-sm font-medium">VA Talent Fund (60%)</span>
+                                    <span class="font-bold text-slate-900" id="m_talent_fund">$0.00</span>
+                                </div>
+
+                                <div class="px-3 space-y-2">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-slate-500">BD / Sales Lead (0%*)</span>
+                                        <span class="font-bold text-slate-400">$0.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-slate-500">Account Manager (5%)</span>
+                                        <span class="font-bold text-slate-900" id="m_am_each">$0.00</span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                                        <span class="text-sm font-bold text-indigo-700">Per C-Suite Member (Share of 15%)</span>
+                                        <span class="text-lg font-black text-indigo-700" id="m_csuite_each">$0.00</span>
+                                    </div>
+                                    <p class="text-[10px] text-right text-slate-400 italic">Pool Total: <span id="m_csuite_total"></span></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mb-8">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs font-bold uppercase text-slate-400">Setup Fee Share (35%)</span>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                <p class="text-[10px] font-black text-slate-400 uppercase">Total Pool</p>
-                                <p class="text-xl font-bold text-slate-900" id="s_csuite_total">$0.00</p>
+                        <div>
+                            <div class="flex justify-between items-end border-b pb-2 mb-4">
+                                <h3 class="font-black text-emerald-600 uppercase text-sm tracking-tighter">Setup Fee Distribution</h3>
+                                <span class="text-[10px] font-bold text-slate-400" id="displaySetupHeader">$0.00 TOTAL</span>
                             </div>
-                            <div class="p-4 bg-emerald-600 rounded-2xl shadow-md text-white">
-                                <p class="text-[10px] font-black text-emerald-100 uppercase">Per Member</p>
-                                <p class="text-xl font-bold" id="s_csuite_each">$0.00</p>
+                            
+                            <div class="space-y-3">
+                                <div class="grid grid-cols-2 gap-3 px-3">
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-slate-500">BD Lead (35%)</span>
+                                        <span class="font-bold text-slate-900" id="s_bd">$0.00</span>
+                                    </div>
+                                    <div class="flex justify-between text-sm">
+                                        <span class="text-slate-500">Profit (15%)</span>
+                                        <span class="font-bold text-slate-900" id="s_profit">$0.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-between items-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                    <div>
+                                        <p class="text-[10px] font-black text-emerald-600 uppercase">Per C-Suite Individual</p>
+                                        <p class="text-sm text-emerald-800">Share of 35% Pool</p>
+                                    </div>
+                                    <span class="text-2xl font-black text-emerald-700" id="s_csuite_each">$0.00</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div id="varianceBox" class="p-4 rounded-2xl text-center border-2 mb-4">
-                        <p class="text-xs font-bold uppercase mb-1">Budget Variance</p>
-                        <p id="varianceAmount" class="text-2xl font-black">$0.00</p>
-                        <p id="varianceStatus" class="text-[10px] font-medium"></p>
-                    </div>
-
-                    <div class="flex justify-between text-xs text-slate-500 px-2">
-                        <span>Model Price: <b id="totalRetainer" class="text-slate-800"></b></span>
-                        <span>Client Budget: <b id="displayClientBudget" class="text-slate-800"></b></span>
+                        <div id="varianceBox" class="p-4 rounded-2xl flex justify-between items-center border-2">
+                            <div class="text-left">
+                                <p class="text-[10px] font-black uppercase opacity-60">Budget Variance</p>
+                                <p id="varianceStatus" class="text-xs font-bold"></p>
+                            </div>
+                            <p id="varianceAmount" class="text-xl font-black"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,22 +167,20 @@
         function renderItems() {
             const container = document.getElementById('lineItemsContainer');
             container.innerHTML = items.map(item => `
-                <div class="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="flex-grow">
-                        <select onchange="updateItem(${item.id}, 'niche', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm font-semibold">
+                        <select onchange="updateItem(${item.id}, 'niche', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm font-bold">
                             ${Object.keys(pricingData).map(k => `<option value="${k}" ${item.niche === k ? 'selected' : ''}>${pricingData[k].name}</option>`).join('')}
                         </select>
                     </div>
-                    <div class="w-full md:w-32">
-                        <select onchange="updateItem(${item.id}, 'level', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm">
+                    <div class="w-full md:w-28">
+                        <select onchange="updateItem(${item.id}, 'level', this.value)" class="w-full p-2 bg-white border rounded-lg text-xs">
                             <option value="low" ${item.level === 'low' ? 'selected' : ''}>Low</option>
                             <option value="mid" ${item.level === 'mid' ? 'selected' : ''}>Mid</option>
                             <option value="high" ${item.level === 'high' ? 'selected' : ''}>High</option>
                         </select>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-16 p-2 bg-white border rounded-lg text-sm text-center font-bold">
-                    </div>
+                    <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-14 p-2 bg-white border rounded-lg text-sm text-center font-bold">
                     <button onclick="removeLineItem(${item.id})" class="text-slate-300 hover:text-red-500 px-2">&times;</button>
                 </div>
             `).join('');
@@ -163,41 +189,42 @@
 
         function calculate() {
             let modelTotal = 0;
-            items.forEach(item => {
-                modelTotal += (pricingData[item.niche][item.level] * (item.qty || 0));
-            });
+            items.forEach(item => { modelTotal += (pricingData[item.niche][item.level] * (item.qty || 0)); });
 
             const clientBudget = parseFloat(document.getElementById('clientBudget').value) || 0;
             const setup = parseFloat(document.getElementById('setupInput').value) || 0;
             const csuiteCount = parseInt(document.getElementById('csuiteCount').value) || 1;
             
             document.getElementById('csuiteDisplay').innerText = csuiteCount;
-            document.getElementById('csuiteHeadcountLabel').innerText = `${csuiteCount} MEMBER${csuiteCount > 1 ? 'S' : ''}`;
             document.getElementById('totalRetainer').innerText = format(modelTotal);
-            document.getElementById('displayClientBudget').innerText = format(clientBudget);
+            document.getElementById('displaySetupHeader').innerText = format(setup) + " TOTAL";
 
-            // Monthly Payouts
-            const mCsuiteTotal = modelTotal * 0.15;
-            document.getElementById('m_csuite_total').innerText = format(mCsuiteTotal);
-            document.getElementById('m_csuite_each').innerText = format(mCsuiteTotal / csuiteCount);
+            // Monthly Payouts (Phase 2 Steady State)
+            const mCsuitePool = modelTotal * 0.15;
+            document.getElementById('m_talent_fund').innerText = format(modelTotal * 0.60);
+            document.getElementById('m_am_each').innerText = format(modelTotal * 0.05);
+            document.getElementById('m_csuite_total').innerText = format(mCsuitePool);
+            document.getElementById('m_csuite_each').innerText = format(mCsuitePool / csuiteCount);
 
             // Setup Payouts
-            const sCsuiteTotal = setup * 0.35;
-            document.getElementById('s_csuite_total').innerText = format(sCsuiteTotal);
-            document.getElementById('s_csuite_each').innerText = format(sCsuiteTotal / csuiteCount);
+            const sCsuitePool = setup * 0.35;
+            document.getElementById('s_bd').innerText = format(setup * 0.35);
+            document.getElementById('s_profit').innerText = format(setup * 0.15);
+            document.getElementById('s_csuite_each').innerText = format(sCsuitePool / csuiteCount);
 
-            // Variance logic
+            // Variance
             const variance = clientBudget - modelTotal;
             const varBox = document.getElementById('varianceBox');
             const varAmt = document.getElementById('varianceAmount');
-            const varStatus = document.getElementById('varianceStatus');
+            const varStat = document.getElementById('varianceStatus');
+
             varAmt.innerText = format(Math.abs(variance));
             if (variance >= 0) {
-                varBox.className = "p-4 rounded-2xl text-center border-2 border-emerald-500 bg-emerald-50 text-emerald-700 mb-4";
-                varStatus.innerText = "UNDER BUDGET (Safe Margin)";
+                varBox.className = "p-4 rounded-2xl flex justify-between items-center border-2 border-emerald-500 bg-emerald-50 text-emerald-700";
+                varStat.innerText = "Under Budget";
             } else {
-                varBox.className = "p-4 rounded-2xl text-center border-2 border-rose-500 bg-rose-50 text-rose-700 mb-4";
-                varStatus.innerText = "OVER BUDGET (Action Required)";
+                varBox.className = "p-4 rounded-2xl flex justify-between items-center border-2 border-rose-500 bg-rose-50 text-rose-700";
+                varStat.innerText = "Over Budget";
             }
         }
 
