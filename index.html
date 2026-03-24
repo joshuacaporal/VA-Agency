@@ -3,77 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vextum Multi-Talent Calculator</title>
+    <title>Vextum Sales & Budget Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900">
 
-    <div class="max-w-6xl mx-auto py-12 px-4">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight text-indigo-700">Vextum Proposal Engine</h1>
-            <p class="text-slate-500 mt-2 text-lg">Multi-niche headcount aggregator & fee distribution.</p>
+    <div class="max-w-7xl mx-auto py-12 px-4">
+        <header class="flex justify-between items-end mb-10 border-b pb-6">
+            <div>
+                <h1 class="text-4xl font-extrabold text-indigo-700 tracking-tight">Vextum Sales Engine</h1>
+                <p class="text-slate-500 mt-1">Model vs. Client Budget Comparison</p>
+            </div>
+            <div class="text-right">
+                <button onclick="addLineItem()" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">+ Add Talent Line</button>
+            </div>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <div class="lg:col-span-7 space-y-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Hiring Plan</h2>
-                        <button onclick="addLineItem()" class="text-xs bg-indigo-600 text-white px-3 py-1 rounded-full hover:bg-indigo-700 transition">+ Add Talent</button>
-                    </div>
-                    
-                    <div id="lineItemsContainer" class="space-y-3">
+                
+                <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200 shadow-sm">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-amber-700 mb-4">Client Constraints</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-amber-900 mb-1">Client Monthly Budget ($)</label>
+                            <input type="number" id="clientBudget" value="5000" class="w-full p-3 bg-white border border-amber-300 rounded-xl outline-none focus:ring-2 focus:ring-amber-500" oninput="calculate()">
                         </div>
-
-                    <div class="mt-6 pt-4 border-t border-dashed">
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">Total Setup Fee ($)</label>
-                        <input type="number" id="setupInput" value="1000" class="w-full md:w-1/3 p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none" oninput="calculate()">
+                        <div>
+                            <label class="block text-sm font-semibold text-amber-900 mb-1">Proposed Setup Fee ($)</label>
+                            <input type="number" id="setupInput" value="1500" class="w-full p-3 bg-white border border-amber-300 rounded-xl outline-none" oninput="calculate()">
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-indigo-900 p-6 rounded-2xl shadow-lg text-white">
-                    <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-300 mb-4">C-Suite Structure</h2>
-                    <div class="flex items-center space-x-4">
-                        <input type="range" id="csuiteCount" min="1" max="10" value="4" class="flex-grow h-2 bg-indigo-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
-                        <span id="csuiteDisplay" class="text-2xl font-bold w-8 text-center">4</span>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Proposed Headcount</h2>
+                    <div id="lineItemsContainer" class="space-y-3">
+                        </div>
+                </div>
+
+                <div class="bg-slate-900 p-6 rounded-2xl shadow-lg text-white">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Leadership Structure</h2>
+                    <div class="flex items-center space-x-6">
+                        <div class="flex-grow">
+                            <label class="block text-xs font-semibold mb-2 text-slate-400">C-Suite Members Sharing Pool</label>
+                            <input type="range" id="csuiteCount" min="1" max="10" value="4" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer" oninput="calculate()">
+                        </div>
+                        <span id="csuiteDisplay" class="text-3xl font-black text-indigo-400 w-12 text-center">4</span>
                     </div>
                 </div>
             </div>
 
             <div class="lg:col-span-5 space-y-6">
-                <div class="bg-white p-6 rounded-2xl border-2 border-indigo-600 shadow-xl sticky top-6">
-                    <h2 class="text-xl font-bold mb-6 text-slate-800">Financial Summary</h2>
+                
+                <div class="bg-white p-8 rounded-3xl border-2 border-slate-900 shadow-2xl sticky top-6">
+                    <h2 class="text-xl font-bold mb-6 text-slate-800 border-b pb-4">Comparison Analysis</h2>
                     
-                    <div class="space-y-4 mb-8">
-                        <div class="flex justify-between">
-                            <span class="text-slate-500">Total Monthly Retainer</span>
-                            <span class="text-2xl font-black text-indigo-700" id="totalRetainer">$0.00</span>
-                        </div>
-                        <div class="flex justify-between border-t pt-2">
-                            <span class="text-slate-500">Total Setup Fee</span>
-                            <span class="text-xl font-bold text-emerald-600" id="totalSetup">$0.00</span>
-                        </div>
-                    </div>
-
-                    <div class="space-y-6 text-sm">
-                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                            <h3 class="font-bold text-slate-700 mb-3 border-b pb-1">Phase 1: Months 1-3 (30% Overhead)</h3>
-                            <div class="space-y-1">
-                                <div class="flex justify-between"><span>VA Pool (50%)</span> <span id="m1_talent" class="font-semibold">$0</span></div>
-                                <div class="flex justify-between"><span>BD Commission (10%)</span> <span id="m1_bd">$0</span></div>
-                                <div class="flex justify-between"><span>C-Suite Total (15%)</span> <span id="m1_csuite">$0</span></div>
-                                <div class="flex justify-between"><span>AM (5%)</span> <span id="m1_am">$0</span></div>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase">Vextum Model Price</p>
+                                <p class="text-2xl font-black text-slate-900" id="totalRetainer">$0.00</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-slate-400 uppercase">Client Budget</p>
+                                <p class="text-2xl font-black text-slate-900" id="displayClientBudget">$0.00</p>
                             </div>
                         </div>
 
-                        <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-                            <h3 class="font-bold text-indigo-800 mb-3 border-b border-indigo-200 pb-1">Phase 2: Month 4+ (20% Overhead)</h3>
-                            <div class="space-y-1 text-indigo-900">
-                                <div class="flex justify-between"><span>VA Pool (60%)</span> <span id="m4_talent" class="font-semibold">$0</span></div>
-                                <div class="flex justify-between"><span>BD (0%)</span> <span>$0.00</span></div>
-                                <div class="flex justify-between"><span>C-Suite Total (15%)</span> <span id="m4_csuite">$0</span></div>
-                                <div class="flex justify-between"><span>AM (5%)</span> <span id="m4_am">$0</span></div>
+                        <div id="varianceBox" class="p-4 rounded-2xl text-center border-2">
+                            <p class="text-xs font-bold uppercase mb-1">Budget Variance</p>
+                            <p id="varianceAmount" class="text-3xl font-black">$0.00</p>
+                            <p id="varianceStatus" class="text-xs mt-1 font-medium"></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 pt-4">
+                            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                <h3 class="text-[10px] font-black text-slate-400 uppercase mb-2">Month 1-3 (30%)</h3>
+                                <div class="space-y-1 text-xs">
+                                    <div class="flex justify-between"><span>VA Pool</span> <span id="m1_talent" class="font-bold"></span></div>
+                                    <div class="flex justify-between text-indigo-600"><span>BD Cut</span> <span id="m1_bd" class="font-bold"></span></div>
+                                    <div class="flex justify-between"><span>C-Suite</span> <span id="m1_csuite" class="font-bold"></span></div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                                <h3 class="text-[10px] font-black text-indigo-400 uppercase mb-2">Month 4+ (20%)</h3>
+                                <div class="space-y-1 text-xs">
+                                    <div class="flex justify-between"><span>VA Pool</span> <span id="m4_talent" class="font-bold text-indigo-700"></span></div>
+                                    <div class="flex justify-between text-slate-400"><span>BD Cut</span> <span>$0.00</span></div>
+                                    <div class="flex justify-between"><span>C-Suite</span> <span id="m4_csuite" class="font-bold"></span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <h3 class="text-[10px] font-black text-emerald-600 uppercase mb-2">Setup Fee Split</h3>
+                            <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-xs">
+                                <div class="flex justify-between text-emerald-800"><span>BD (35%)</span> <span id="s_bd" class="font-bold"></span></div>
+                                <div class="flex justify-between text-emerald-800"><span>Profit (15%)</span> <span id="s_profit" class="font-bold"></span></div>
+                                <div class="flex justify-between text-emerald-800"><span>C-Suite (35%)</span> <span id="s_csuite" class="font-bold"></span></div>
+                                <div class="flex justify-between text-emerald-800"><span>Tech (10%)</span> <span id="s_tech" class="font-bold"></span></div>
                             </div>
                         </div>
                     </div>
@@ -114,48 +144,69 @@
         function renderItems() {
             const container = document.getElementById('lineItemsContainer');
             container.innerHTML = items.map(item => `
-                <div class="flex flex-wrap md:flex-nowrap items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <select onchange="updateItem(${item.id}, 'niche', this.value)" class="flex-grow p-2 bg-white border rounded-lg text-sm">
-                        ${Object.keys(pricingData).map(k => `<option value="${k}" ${item.niche === k ? 'selected' : ''}>${pricingData[k].name}</option>`).join('')}
-                    </select>
-                    <select onchange="updateItem(${item.id}, 'level', this.value)" class="p-2 bg-white border rounded-lg text-sm">
-                        <option value="low" ${item.level === 'low' ? 'selected' : ''}>Low</option>
-                        <option value="mid" ${item.level === 'mid' ? 'selected' : ''}>Mid</option>
-                        <option value="high" ${item.level === 'high' ? 'selected' : ''}>High</option>
-                    </select>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs text-slate-400">Qty:</span>
-                        <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-16 p-2 bg-white border rounded-lg text-sm text-center">
+                <div class="flex flex-wrap md:flex-nowrap items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div class="flex-grow">
+                        <select onchange="updateItem(${item.id}, 'niche', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm font-semibold">
+                            ${Object.keys(pricingData).map(k => `<option value="${k}" ${item.niche === k ? 'selected' : ''}>${pricingData[k].name}</option>`).join('')}
+                        </select>
                     </div>
-                    <button onclick="removeLineItem(${item.id})" class="text-slate-300 hover:text-red-500 px-2">&times;</button>
+                    <div class="w-full md:w-32">
+                        <select onchange="updateItem(${item.id}, 'level', this.value)" class="w-full p-2 bg-white border rounded-lg text-sm">
+                            <option value="low" ${item.level === 'low' ? 'selected' : ''}>Low</option>
+                            <option value="mid" ${item.level === 'mid' ? 'selected' : ''}>Mid</option>
+                            <option value="high" ${item.level === 'high' ? 'selected' : ''}>High</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="number" value="${item.qty}" min="1" oninput="updateItem(${item.id}, 'qty', parseInt(this.value))" class="w-16 p-2 bg-white border rounded-lg text-sm text-center font-bold">
+                    </div>
+                    <button onclick="removeLineItem(${item.id})" class="text-slate-300 hover:text-red-500 transition-colors px-2 text-xl">&times;</button>
                 </div>
             `).join('');
             calculate();
         }
 
         function calculate() {
-            let totalRetainer = 0;
+            let modelTotal = 0;
             items.forEach(item => {
-                totalRetainer += (pricingData[item.niche][item.level] * (item.qty || 0));
+                modelTotal += (pricingData[item.niche][item.level] * (item.qty || 0));
             });
 
+            const clientBudget = parseFloat(document.getElementById('clientBudget').value) || 0;
             const setup = parseFloat(document.getElementById('setupInput').value) || 0;
             const csuiteCount = parseInt(document.getElementById('csuiteCount').value) || 1;
+            
             document.getElementById('csuiteDisplay').innerText = csuiteCount;
+            document.getElementById('totalRetainer').innerText = format(modelTotal);
+            document.getElementById('displayClientBudget').innerText = format(clientBudget);
 
-            document.getElementById('totalRetainer').innerText = format(totalRetainer);
-            document.getElementById('totalSetup').innerText = format(setup);
+            // Variance Calculation
+            const variance = clientBudget - modelTotal;
+            const varBox = document.getElementById('varianceBox');
+            const varAmt = document.getElementById('varianceAmount');
+            const varStatus = document.getElementById('varianceStatus');
 
-            // Months 1-3
-            document.getElementById('m1_talent').innerText = format(totalRetainer * 0.50);
-            document.getElementById('m1_bd').innerText = format(totalRetainer * 0.10);
-            document.getElementById('m1_csuite').innerText = format(totalRetainer * 0.15);
-            document.getElementById('m1_am').innerText = format(totalRetainer * 0.05);
+            varAmt.innerText = format(Math.abs(variance));
+            if (variance >= 0) {
+                varBox.className = "p-4 rounded-2xl text-center border-2 border-emerald-500 bg-emerald-50 text-emerald-700";
+                varStatus.innerText = "UNDER BUDGET (Safe)";
+            } else {
+                varBox.className = "p-4 rounded-2xl text-center border-2 border-rose-500 bg-rose-50 text-rose-700";
+                varStatus.innerText = "OVER BUDGET (Requires Negotiation)";
+            }
 
-            // Month 4+
-            document.getElementById('m4_talent').innerText = format(totalRetainer * 0.60);
-            document.getElementById('m4_csuite').innerText = format(totalRetainer * 0.15);
-            document.getElementById('m4_am').innerText = format(totalRetainer * 0.05);
+            // Phase Distributions (Using Model Price)
+            document.getElementById('m1_talent').innerText = format(modelTotal * 0.50);
+            document.getElementById('m1_bd').innerText = format(modelTotal * 0.10);
+            document.getElementById('m1_csuite').innerText = format(modelTotal * 0.15);
+            document.getElementById('m4_talent').innerText = format(modelTotal * 0.60);
+            document.getElementById('m4_csuite').innerText = format(modelTotal * 0.15);
+
+            // Setup
+            document.getElementById('s_bd').innerText = format(setup * 0.35);
+            document.getElementById('s_csuite').innerText = format(setup * 0.35);
+            document.getElementById('s_profit').innerText = format(setup * 0.15);
+            document.getElementById('s_tech').innerText = format(setup * 0.10);
         }
 
         function format(num) {
